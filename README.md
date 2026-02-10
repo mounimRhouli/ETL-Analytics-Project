@@ -1,99 +1,97 @@
-# Gym Safety ETL and Analysis
+# Gym Safety Analytics & Recommendation System
 
-## Project Overview
+## Executive Summary
 
-This project involves extracting, transforming, and analyzing a dataset of gym exercises. The analysis includes calculating safety scores for exercises, evaluating models, and generating visualizations. The process is automated through a series of Python scripts, with enhanced interactivity
-and logging for better usability and debugging.
+This project delivers a comprehensive data engineering and analytics solution designed to evaluate and enhance gym exercise safety. By leveraging an automated ETL (Extract, Transform, Load) pipeline, the system processes exercise metadata to calculate safety scores, classify techniques by difficulty, and generate data-driven recommendations. The initiative aims to mitigate injury risks and improve client retention through actionable insights and accessible visualizations.
 
-### Business Problem
-Unsafe lifting practices in gyms pose risks to member safety, which can be mitigated by providing easily accessible, data-driven visualizations of proper exercise techniques categorized by difficulty and muscle group. The project aims to develop a recommendation system that
-enhances client satisfaction and reduces injury rates, directly contributing to higher retention and client loyalty.
+## Business Context
 
-### Data Sets Used
-- `megaGymDataset.csv`: Contains data on various exercises, including type, body part, equipment, difficulty level, rating, and description.
-- `dataset-metadata.json`: Metadata for the datasets.
+Unsafe training practices represent a significant liability and safety hazard within fitness environments. This solution addresses these challenges by determining objective safety metrics for various exercises. The resulting recommendation engine aids in curating safer workout routines, customized by difficulty level and specific muscle groups, ultimately fostering a safer training environment.
 
-### Techniques Employed
-- **Mean Imputation**: Handling missing values by imputing the mean rating for each exercise level.  
-- **Encoding Categorical Variables**  
-- **K-Nearest Neighbor to predict safety scores**  
-    - GridSearchCV to find the optimal number of neighbors
-    - MSE, MAE, R^2 metrics
+## Technical Methodology
 
-### Expected Outputs
-- Analysis/evaluation/visualizations in clear, readable files
-- Summary statistics of the exercise dataset.
-- Visualization of exercises grouped into clusters
-- Recommendations of exercises based on their difficulty.
-- Logging to all files
-- Non-technical visualiztion for the user
-- Technical visulation to represent model performance
+The project employs a modular Python-based architecture utilizing the following techniques:
 
-# Setup Instructions
+- **ETL Automation**: Seamless extraction and transformation of raw exercise datasets.
+- **Data Engineering**: Robust handling of missing data using Mean Imputation strategies and categorical variable encoding.
+- **Predictive Modeling**: Implementation of K-Nearest Neighbors (KNN) algorithms to predict exercise safety scores.
+  - **Hyperparameter Optimization**: Usage of GridSearchCV for optimal neighbor selection.
+  - **Model Evaluation**: Rigorous testing using MSE (Mean Squared Error), MAE (Mean Absolute Error), and $R^2$ metrics.
+- **Visualization**: Generation of both technical model performance plots and user-facing clustering diagrams.
 
-## Setting Up Kaggle API Keys
+## Repository Structure
 
-To run this project, you may need access to datasets hosted on Kaggle. Follow the steps below to set up your Kaggle API keys:
+The codebase is organized into distinct logical modules to ensure meaningful separation of concerns:
 
-1. **Obtain Your Kaggle API Key:**
-    - Log in to your Kaggle account.
-    - Go to your account settings by clicking on your profile picture in the top right corner and selecting "Account."
-    - Scroll down to the "API" section and click "Create New API Token."
-    - A file named `kaggle.json` will be downloaded, containing your Kaggle API credentials.
+```text
+├── analysis/               # Analytical logic and model evaluation
+│   ├── descriptive_analysis.py
+│   └── prescriptive_analysis.py
+├── data/                   # Data storage layer
+│   ├── downloaded/         # Raw ingestion stage
+│   └── processed/          # Transformed analytical datasets
+├── etl/                    # Extraction & Transformation pipeline
+│   ├── extract.py
+│   └── transform.py
+├── log/                    # System runtime logs
+│   └── gym_project.log
+├── outputs/                # Analytical deliverables
+│   ├── descriptive_analysis.csv
+│   └── prescriptive_analysis.csv
+├── vis/                    # Visualization generation
+│   └── visualizations.py
+├── main.py                 # Application entry point/Orchestrator
+└── requirements.txt        # Project dependencies
+```
 
-2. **Place the API Key:**
-    - Move the `kaggle.json` file to a secure location:
-        - **Windows:** `C:\Users\<YourUsername>\.kaggle\kaggle.json`
-    - Ensure that the `.kaggle` directory is hidden and that the `kaggle.json` file is accessible only by you.
+## Data Assets
 
-3. **Using the API Key in This Project:**
-    - The Kaggle API is required to download datasets automatically when you run the scripts.
-    - Ensure you have the Kaggle Python package installed:
-      ```sh
-      python -m pip install kaggle
-      ```
-    - Authenticate your Kaggle API in your scripts:
-      ```python
-      import kaggle
-      kaggle.api.authenticate()
-      ```
-    - The datasets will be automatically downloaded using the API when you run the project.
+The analysis is driven by the **Mega Gym Dataset** (`megaGymDataset.csv`), incorporating detailed attributes such as:
+- Exercise Type & Description
+- Target Body Part & Muscle Groups
+- Equipment Requirements
+- Difficulty Ratings
 
+## Getting Started
 
+### Prerequisites
+- Python 3.11 or higher
+- Kaggle API Account (for data ingestion)
 
-## Cloning the Repository
-Clone the repository to your local machine using the following command:  
-`git clone https://github.com/username/inst414-final-project-luciano-iocco.git`  
-Create a virtual environment and select the most recent version of Python. The current working Python version is 3.11.1. requirements.txt contains all of the dependencies   needed to run this project. Install the required packages using `python -m pip install -r requirements.txt`  
-Run the main script to execute the ETL process and analysis (effectively run the entire program) `python main.py`
+### Configuration & Installation
 
-## Logging
+1. **Kaggle API Setup**:
+   To facilitate automated dataset downloads, configure your Kaggle credentials:
+   - Generate an API token (`kaggle.json`) from your Kaggle account settings.
+   - Securely place the file in your home directory:
+     - **Windows**: `%USERPROFILE%/.kaggle/kaggle.json`
+     - **Linux/Mac**: `~/.kaggle/kaggle.json`
 
-Logging is configured to write to "gym_project.log". The log includes detailed information about each step of the process, including any errors that occur along with 
-their time, level, and a message.
+2. **Environment Installation**:
+   Clone the repository and install the required dependencies:
+   ```bash
+   git clone <repository-url>
+   cd <repository-directory>
+   # Recommended: Create and activate a virtual environment
+   pip install -r requirements.txt
+   ```
 
-# Code Package Structure
+### Execution
 
-### **data/**
-- **`downloaded/`**: Stores raw datasets fetched from sources.
-- **`processed/`**: Holds processed data files after transformation.
+To execute the full pipeline—including ETL, analysis, logging, and visualization generation—run the application entry point:
 
-### **outputs/**
-- **`descriptive_analysis.csv`**: Results from the descriptive analysis script.
-- **`prescriptive_analysis.csv`**: Results from the prescriptive analysis script.
+```bash
+python main.py
+```
 
-### **analysis/**
-- **`descriptive_analysis.py`**: Conducts descriptive statistical analysis.
-- **`prescriptive_analysis.py`**: Evaluates models and generates recommendations
+### Logging & Debugging
 
-### **etl/**
-- **`extract.py`**: Loads raw dataset into a DataFrame.
-- **`transform.py`**: Processes data, manages missing values, and computes exercise safety scores.
+The system maintains detailed execution logs in `log/gym_project.log`. This includes timestamped entries for process start/completion, error tracking, and information levels to assist with debugging and auditability.
 
-### **vis/**
-- **`visualizations.py`**: Creates visualizations for data insights and results.
+## Outputs & Deliverables
 
-### **log/**
-- Automatically stores logging output.
-- **`main.py`** outputs logs to `gym_project.log`.
-
+- **Statistical Reports**: Detailed descriptive statistics of the exercise landscape.
+- **Safety Recommendations**: Prescriptive analysis outputting exercise suggestions based on calculated safety scores.
+- **Visual Analytics**: 
+  - Hierarchical clustering of exercises.
+  - Model proficiency graphs comparing predicted vs. actual safety metrics.
