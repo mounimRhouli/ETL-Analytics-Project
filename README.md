@@ -1,97 +1,95 @@
-# Gym Safety Analytics & Recommendation System
+# Gym Exercise Safety Analytics & Recommendation Engine
 
 ## Executive Summary
 
-This project delivers a comprehensive data engineering and analytics solution designed to evaluate and enhance gym exercise safety. By leveraging an automated ETL (Extract, Transform, Load) pipeline, the system processes exercise metadata to calculate safety scores, classify techniques by difficulty, and generate data-driven recommendations. The initiative aims to mitigate injury risks and improve client retention through actionable insights and accessible visualizations.
+This project delivers a comprehensive end-to-end data pipeline focused on the analysis and recommendation of gym exercises based on safety profiles. By leveraging automated Extract, Transform, Load (ETL) processes and Machine Learning techniques, the system curates exercise data, predicts safety scores, and provides interactive recommendations tailored to user capability levels.
 
-## Business Context
+## Key Features
 
-Unsafe training practices represent a significant liability and safety hazard within fitness environments. This solution addresses these challenges by determining objective safety metrics for various exercises. The resulting recommendation engine aids in curating safer workout routines, customized by difficulty level and specific muscle groups, ultimately fostering a safer training environment.
+*   **Automated Data Pipeline**: A robust ETL workflow that extracts raw data from Kaggle, cleanses and normalizes it, and prepares it for analytical modeling.
+*   **Predictive Analytics**: Utilizes K-Nearest Neighbors (KNN) regression with Hyperparameter Tuning (GridSearchCV) to model and predict exercise safety ratings.
+*   **Intelligent Data Handling**: Implements sophisticated imputation strategies for missing values, including mean imputation based on proficiency levels and categorical encoding.
+*   **Interactive User Interface**: Features a CLI-driven visualization tool that generates personalized exercise recommendations based on muscle groups and safety thresholds.
+*   **Comprehensive Logging**: Integrated logging system for monitoring pipeline health, debugging protocols, and execution tracking.
 
-## Technical Methodology
+## System Architecture
 
-The project employs a modular Python-based architecture utilizing the following techniques:
+The project is structured into modular components ensuring maintainability and scalability:
 
-- **ETL Automation**: Seamless extraction and transformation of raw exercise datasets.
-- **Data Engineering**: Robust handling of missing data using Mean Imputation strategies and categorical variable encoding.
-- **Predictive Modeling**: Implementation of K-Nearest Neighbors (KNN) algorithms to predict exercise safety scores.
-  - **Hyperparameter Optimization**: Usage of GridSearchCV for optimal neighbor selection.
-  - **Model Evaluation**: Rigorous testing using MSE (Mean Squared Error), MAE (Mean Absolute Error), and $R^2$ metrics.
-- **Visualization**: Generation of both technical model performance plots and user-facing clustering diagrams.
+1.  **Data Extraction**: Interacts with the Kaggle API to programmatically retrieve the latest gym exercise datasets.
+2.  **Data Transformation**:
+    *   Normalization of proficiency levels (Beginner, Intermediate, Advanced).
+    *   Statistical imputation for missing ratings.
+    *   Standardization of equipment metadata.
+3.  **Machine Learning & Analysis**:
+    *   **Prescriptive Analysis**: Generates actionable datasets for downstream reporting.
+    *   **Descriptive Analysis**: Evaluates model performance using MSE, MAE, and $R^2$ metrics.
+4.  **Visualization**: Renders visual infographics for exercise distribution and recommendations.
 
-## Repository Structure
+## Technical Requirements
 
-The codebase is organized into distinct logical modules to ensure meaningful separation of concerns:
+*   **Python 3.11+**
+*   **Kaggle API** (for data retrieval)
+*   **Key Libraries**: `pandas`, `numpy`, `scikit-learn`, `plotly`, `matplotlib`
 
-```text
-├── analysis/               # Analytical logic and model evaluation
-│   ├── descriptive_analysis.py
-│   └── prescriptive_analysis.py
-├── data/                   # Data storage layer
-│   ├── downloaded/         # Raw ingestion stage
-│   └── processed/          # Transformed analytical datasets
-├── etl/                    # Extraction & Transformation pipeline
-│   ├── extract.py
-│   └── transform.py
-├── log/                    # System runtime logs
-│   └── gym_project.log
-├── outputs/                # Analytical deliverables
-│   ├── descriptive_analysis.csv
-│   └── prescriptive_analysis.csv
-├── vis/                    # Visualization generation
-│   └── visualizations.py
-├── main.py                 # Application entry point/Orchestrator
-└── requirements.txt        # Project dependencies
+## Installation & Setup
+
+### 1. Prerequisite Configuration
+Ensure you have a valid Kaggle API token (`kaggle.json`).
+1.  Download your API token from your Kaggle account settings.
+2.  Place the `kaggle.json` file in your user directory:
+    *   **Windows**: `C:\Users\<Username>\.kaggle\kaggle.json`
+    *   **Linux/Mac**: `~/.kaggle/kaggle.json`
+
+### 2. Repository Setup
+Clone the project and install dependencies:
+
+```bash
+git clone <repository-url>
+cd ETL-Analysis
+python -m pip install -r requirements.txt
 ```
 
-## Data Assets
+## Usage
 
-The analysis is driven by the **Mega Gym Dataset** (`megaGymDataset.csv`), incorporating detailed attributes such as:
-- Exercise Type & Description
-- Target Body Part & Muscle Groups
-- Equipment Requirements
-- Difficulty Ratings
+The entire pipeline is orchestrated via a single entry point for ease of use.
 
-## Getting Started
-
-### Prerequisites
-- Python 3.11 or higher
-- Kaggle API Account (for data ingestion)
-
-### Configuration & Installation
-
-1. **Kaggle API Setup**:
-   To facilitate automated dataset downloads, configure your Kaggle credentials:
-   - Generate an API token (`kaggle.json`) from your Kaggle account settings.
-   - Securely place the file in your home directory:
-     - **Windows**: `%USERPROFILE%/.kaggle/kaggle.json`
-     - **Linux/Mac**: `~/.kaggle/kaggle.json`
-
-2. **Environment Installation**:
-   Clone the repository and install the required dependencies:
-   ```bash
-   git clone <repository-url>
-   cd <repository-directory>
-   # Recommended: Create and activate a virtual environment
-   pip install -r requirements.txt
-   ```
-
-### Execution
-
-To execute the full pipeline—including ETL, analysis, logging, and visualization generation—run the application entry point:
+### Execute Pipeline
+Run the main control script to trigger the full workflow (Extraction -> Transformation -> Analysis -> Visualization):
 
 ```bash
 python main.py
 ```
 
-### Logging & Debugging
+### Module Descriptions
+*   **`etl/extract.py`**: Handles authentication and data fetching.
+*   **`etl/transform.py`**: Performs data cleaning, encoding, and imputation.
+*   **`analysis/knn_regression_and_summary.py`**: Trains the ML model and outputs performance metrics.
+*   **`vis/visualizations.py`**: Launches the interactive recommendation visualizer.
 
-The system maintains detailed execution logs in `log/gym_project.log`. This includes timestamped entries for process start/completion, error tracking, and information levels to assist with debugging and auditability.
+## Analytical Methodology
 
-## Outputs & Deliverables
+The core analytical engine employs a K-Nearest Neighbors (KNN) regressor to predict safety scores suitable for different user levels. The model optimization process helps identify the ideal number of neighbors ($k$) to minimize error rates (MSE).
 
-- **Statistical Reports**: Detailed descriptive statistics of the exercise landscape.
-- **Safety Recommendations**: Prescriptive analysis outputting exercise suggestions based on calculated safety scores.
-- **Visual Analytics**: 
-  - Hierarchical clustering of exercises.
-  - Model proficiency graphs comparing predicted vs. actual safety metrics.
+*   **Data Quality**: Missing ratings are imputed using the mean rating of the respective proficiency level to ensure dataset integrity without introducing significant bias.
+*   **Evaluation**: The model is rigorously tested against a hold-out test set, with results visualized via regression plots comparing Predicted vs. Actual safety scores.
+
+## Project Structure
+
+```
+ETL-Analysis/
+├── analysis/               # Analytical scripts and ML models
+├── data/                   # Data storage (raw, processed, reference)
+├── etl/                    # Extraction and Transformation scripts
+├── log/                    # Runtime logs
+├── vis/                    # Visualization modules
+├── main.py                 # Application entry point
+└── requirements.txt        # Project dependencies
+```
+
+## Logging
+
+Execution logs are automatically generated in the `log/` directory (e.g., `gym_project.log`). These logs provide granular details on process execution, successful transactions, and error stack traces.
+
+---
+*Developed for advanced exercise analytics and safety modeling.*
